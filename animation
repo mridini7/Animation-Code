@@ -1,0 +1,42 @@
+from tkinter import *
+import random
+import time
+tk = Tk()
+tk.title("Drawing")
+canvas = Canvas(tk, width=500, height=500)
+canvas.pack()
+color_list = ["red", "green", "blue", "yellow", "orange", "purple","pink", "gold", "grey", "turquoise", "cyan", "magenta"]
+
+class Ball:
+    def __init__(self, input_color):
+        self.color = input_color
+        self.top = 10
+        self.left = 10
+        self.bottom = 60
+        self.right = 60
+        self.shape = canvas.create_oval(self.top, self.left, self.bottom, self.right, fill = self.color)
+
+    def move(self):
+        canvas.move(self.shape, self.xspeed, self.yspeed)
+        pos = canvas.coords(self.shape)
+        if pos[3] <= 0 or pos[1] >= 500:
+            self.yspeed = -self.yspeed
+        if pos[0] <= 0 or pos[2] >= 500:
+            self.xspeed = -self.xspeed
+
+    def setspeed(self, input_xspeed, input_yspeed):
+        self.xspeed = input_xspeed
+        self.yspeed = input_yspeed
+
+ball_list = []
+for i in range(50):
+    ball = Ball(random.choice(color_list))
+    ball.setspeed(random.randrange(1, 10)*2, random.randrange(1, 10)*2)
+    ball_list.append(ball)
+
+while True:
+    tk.update()
+    for ball in ball_list:
+        ball.move()
+        
+canvas.mainloop()
